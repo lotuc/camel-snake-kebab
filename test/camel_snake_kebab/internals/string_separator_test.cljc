@@ -6,8 +6,8 @@
 (deftest split-test
   (testing "regex, string and character separators"
     (are [sep]
-      (and (= ["foo" "bar"] (split sep "foo.bar"))
-           (= [""]          (split sep "")))
+         (and (= ["foo" "bar"] (split sep "foo.bar"))
+              (= [""]          (split sep "")))
       #"\." "." \.))
 
   (testing "input consisting of separator(s)"
@@ -16,7 +16,7 @@
 
   (testing "generic separator"
     (are [x y]
-      (= x (split generic-separator y))
+         (= x (split generic-separator y))
 
       [""]  ""
       [""]  "   "
@@ -30,12 +30,15 @@
       ["foo" "bar"] "foo_bar"
       ["FOO" "BAR"] "FOO_BAR"
 
-      ["räksmörgås"] "räksmörgås"
+      ["räksmörgås"]      "räksmörgås"
+      ["Aräksmörgås" "B"] "AräksmörgåsB"
+      ["ARÄKSMÖRGÅSB"]    "ARÄKSMÖRGÅSB"
 
       ["IP" "Address"] "IPAddress"
 
-      ["Adler" "32"]         "Adler32"
-      ["Inet" "4" "Address"] "Inet4Address"
-      ["Arc" "2" "D"]        "Arc2D"
-      ["a" "123b"]           "a123b"
-      ["A" "123" "B"]        "A123B")))
+      ["Adler32"]         "Adler32"
+      ["Inet4" "Address"] "Inet4Address"
+      ["Arc2" "D"]        "Arc2D"
+      ["a123b"]           "a123b"
+      ["A123B"]           "A123B"
+      ["a123" "B"]        "a123B")))

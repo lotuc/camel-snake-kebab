@@ -22,21 +22,51 @@
 
   (testing "all the type preserving functions"
     (let
-      [inputs    ["FooBar"
-                  "fooBar"
-                  "FOO_BAR"
-                  "foo_bar"
-                  "foo-bar"
-                  "Foo_Bar"]
-       functions [csk/->PascalCase
-                  csk/->camelCase
-                  csk/->SCREAMING_SNAKE_CASE
-                  csk/->snake_case
-                  csk/->kebab-case
-                  csk/->Camel_Snake_Case]
-       formats   [identity keyword symbol]]
+     [inputs-lst [["FooBar"
+                   "fooBar"
+                   "FOO_BAR"
+                   "foo_bar"
+                   "foo-bar"
+                   "Foo_Bar"]
+                  ["FööBär"
+                   "fööBär"
+                   "FÖÖ_BÄR"
+                   "föö_bär"
+                   "föö-bär"
+                   "Föö_Bär"]]
+      functions [csk/->PascalCase
+                 csk/->camelCase
+                 csk/->SCREAMING_SNAKE_CASE
+                 csk/->snake_case
+                 csk/->kebab-case
+                 csk/->Camel_Snake_Case]
+      formats   [identity keyword symbol]]
 
-      (doseq [input inputs, format formats, [output function] (zip inputs functions)]
+      (doseq [inputs inputs-lst, input inputs, format formats, [output function] (zip inputs functions)]
+        (is (= (format output) (function (format input)))))))
+
+  (testing "all the type preserving functions - group chars which have no upper/lower cases"
+    (let
+     [inputs-lst [["Convert2snake"
+                   "convert2snake"
+                   "CONVERT2SNAKE"
+                   "convert2snake"
+                   "convert2snake"
+                   "Convert2snake"]
+                  ["FileMd5"
+                   "fileMd5"
+                   "FILE_MD5"
+                   "file_md5"
+                   "file-md5"
+                   "File_Md5"]]
+      functions [csk/->PascalCase
+                 csk/->camelCase
+                 csk/->SCREAMING_SNAKE_CASE
+                 csk/->snake_case
+                 csk/->kebab-case
+                 csk/->Camel_Snake_Case]
+      formats   [identity keyword symbol]]
+      (doseq [inputs inputs-lst, input inputs, format formats, [output function] (zip inputs functions)]
         (is (= (format output) (function (format input)))))))
 
   (testing "some of the type converting functions"
