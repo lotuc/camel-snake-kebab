@@ -6,6 +6,39 @@
 
 (def zip (partial map vector))
 
+(def all-functions
+  [csk/->PascalCase
+   csk/->Camel_Snake_Case
+   csk/->camelCase
+   csk/->SCREAMING_SNAKE_CASE
+   csk/->snake_case
+   csk/->kebab-case
+   csk/->HTTP-Header-Case
+
+   csk/->PascalCaseKeyword
+   csk/->camelCaseKeyword
+   csk/->SCREAMING_SNAKE_CASE_KEYWORD
+   csk/->snake_case_keyword
+   csk/->kebab-case-keyword
+   csk/->Camel_Snake_Case_Keyword
+   csk/->HTTP-Header-Case-Keyword
+
+   csk/->PascalCaseString
+   csk/->camelCaseString
+   csk/->SCREAMING_SNAKE_CASE_STRING
+   csk/->snake_case_string
+   csk/->kebab-case-string
+   csk/->Camel_Snake_Case_String
+   csk/->HTTP-Header-Case-String
+
+   csk/->PascalCaseSymbol
+   csk/->camelCaseSymbol
+   csk/->SCREAMING_SNAKE_CASE_SYMBOL
+   csk/->snake_case_symbol
+   csk/->kebab-case-symbol
+   csk/->Camel_Snake_Case_Symbol
+   csk/->HTTP-Header-Case-Symbol])
+
 (deftest format-case-test
   (testing "examples"
     (are [x y] (= x y)
@@ -15,6 +48,12 @@
       "X-SSL-Cipher"  (csk/->HTTP-Header-Case "x-ssl-cipher")
       :object-id      (csk/->kebab-case-keyword "object_id"))
       :s3_key         (csk/->snake_case :s3-key :separator \-))
+
+  (testing "return the input when non-transformable"
+    (doseq [f all-functions]
+      (is (= 42 (f 42)))
+      (let [uuid #uuid "66544593-46d7-4c34-8c8e-cf9dada291cb"]
+        (is (= uuid (f uuid))))))
 
   (testing "rejection of namespaced keywords and symbols"
     (is (thrown? ExceptionInfo (csk/->PascalCase (keyword "a" "b"))))
